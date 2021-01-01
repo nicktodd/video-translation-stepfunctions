@@ -1,0 +1,10 @@
+version: 0.2
+phases:
+  build:
+    commands:
+      - echo Build started on `date`
+      # Package SAM template
+      - sam build 
+      # Deploy packaged SAM template
+      - sam deploy -no-confirm-changeset
+
