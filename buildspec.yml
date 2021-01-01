@@ -4,5 +4,5 @@ phases:
     commands:
       - echo Build started on `date`
       - sam build 
-      - sam deploy -no-confirm-changeset
+      - sam deploy --no-confirm-changeset
 
