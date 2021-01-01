@@ -1,0 +1,32 @@
+1
+00:00:01,750 --> 00:00:02,120
+Hi there.
+
+2
+00:00:02,620 --> 00:00:03,410
+My name's Nick Todd.
+
+3
+00:00:03,830 --> 00:00:12,130
+You're gonna be using this video to do a short exercise where you are going to take the content of this video translated into another language on doubling with subtitles.
+
+4
+00:00:12,630 --> 00:00:16,450
+Those subtitles will be in English, but they also then be done in a foreign language.
+
+5
+00:00:16,750 --> 00:00:21,250
+Then you can even replace my voice with an artificial voice speaking out
+
+6
+00:00:21,480 --> 00:00:28,720
+in the foreign language, and you'll see how all of this could be done using the various Amazon machine learning and artificial intelligence services.
+
+7
+00:00:28,780 --> 00:00:29,650
+So good luck
+
+8
+00:00:30,160 --> 00:00:31,480
+and enjoy the exercise.
+

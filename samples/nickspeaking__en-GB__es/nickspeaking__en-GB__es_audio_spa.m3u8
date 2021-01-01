@@ -1,0 +1,12 @@
+#EXTM3U
+#EXT-X-VERSION:4
+#EXT-X-TARGETDURATION:13
+#EXT-X-MEDIA-SEQUENCE:1
+#EXT-X-PLAYLIST-TYPE:VOD
+#EXTINF:12,
+nickspeaking__en-GB__es_audio_spa_00001.aac
+#EXTINF:12,
+nickspeaking__en-GB__es_audio_spa_00002.aac
+#EXTINF:10,
+nickspeaking__en-GB__es_audio_spa_00003.aac
+#EXT-X-ENDLIST
