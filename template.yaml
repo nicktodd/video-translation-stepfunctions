@@ -55,7 +55,7 @@ Resources:
       Environment:
         Variables:
           OUTPUT_BUCKET: transcribe.json.conygre.com
-      Policies: arn:aws:iam::963778699255:policy/S3_Transcribe_Policy
+      Policies: !Sub "arn:aws:iam::${AWS::AccountId}:policy/S3_Transcribe_Policy"
 
   TranslateAndSubtitleFunction:
     Type: AWS::Serverless::Function
@@ -67,7 +67,7 @@ Resources:
         Variables:
           OUTPUT_BUCKET: transcribe.srt.conygre.com
           INPUT_BUCKET: transcribe.json.conygre.com
-      Policies: arn:aws:iam::963778699255:policy/S3_Transcribe_Policy
+      Policies: !Sub "arn:aws:iam::${AWS::AccountId}:policy/S3_Transcribe_Policy"
 
   SSMLFunction:
     Type: AWS::Serverless::Function
@@ -79,7 +79,7 @@ Resources:
         Variables:
           OUTPUT_BUCKET: transcribe.ssml.conygre.com
           INPUT_BUCKET: transcribe.srt.conygre.com
-      Policies: arn:aws:iam::963778699255:policy/S3_Transcribe_Policy
+      Policies: !Sub "arn:aws:iam::${AWS::AccountId}:policy/S3_Transcribe_Policy"
 
   SSMLToPollyFunction:
     Type: AWS::Serverless::Function
@@ -91,7 +91,7 @@ Resources:
         Variables:
           OUTPUT_BUCKET: transcribe.audio.conygre.com
           INPUT_BUCKET: transcribe.ssml.conygre.com
-      Policies: arn:aws:iam::963778699255:policy/S3_Transcribe_Policy
+      Policies: !Sub "arn:aws:iam::${AWS::AccountId}:policy/S3_Transcribe_Policy"
 
   MediaConvertFunction:
     Type: AWS::Serverless::Function
@@ -100,8 +100,8 @@ Resources:
       Handler: lambda_handler.handler
       Runtime: nodejs12.x
       Policies: 
-        - arn:aws:iam::963778699255:policy/S3_Transcribe_Policy
-        - arn:aws:iam::aws:policy/AWSElementalMediaConvertFullAccess
+        - !Sub "arn:aws:iam::${AWS::AccountId}:policy/S3_Transcribe_Policy"
+        - !Sub "arn:aws:iam::aws:policy/AWSElementalMediaConvertFullAccess"
 
 
 
