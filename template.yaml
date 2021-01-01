@@ -1,0 +1,114 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  video-translate-transcode
+
+  Sample SAM Template for video-translate-transcode
+
+Globals:
+  Function:
+    Environment:
+      # Currently these are only used by final Lambda. However, they can all be amended to use these variables
+      Variables:
+        SOURCE_VIDEO_BUCKET: transcribe.input.conygre.com
+        TRANSCRIBED_TEXT_BUCKET: transcribe.json.conygre.com
+        TRANSLATED_SUBTITLES_BUCKET: transcribe.srt.conygre.com
+        SSML_BUCKET: transcribe.ssml.conygre.com
+        POLLY_AUDIO_BUCKET: transcribe.audio.conygre.com
+        FINAL_OUTPUT_BUCKET: transcribe.output.conygre.com
+
+
+
+Resources:
+  VideoTranslaterStateMachine:
+    Type: AWS::Serverless::StateMachine # More info about State Machine Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-statemachine.html
+    Properties:
+      DefinitionUri: statemachine/video-transcode.asl.json
+      DefinitionSubstitutions:
+        TranscriptionFunctionArn: !GetAtt TranscriptionFunction.Arn
+        TranslateAndSubtitleFunctionArn: !GetAtt TranslateAndSubtitleFunction.Arn
+        SSMLFunctionArn: !GetAtt SSMLFunction.Arn
+        SSMLToPollyFunctionArn: !GetAtt SSMLToPollyFunction.Arn
+        MediaConvertFunctionArn: !GetAtt MediaConvertFunction.Arn
+        
+        
+      Policies: # Find out more about SAM policy templates: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
+        - LambdaInvokePolicy:
+            FunctionName: !Ref TranscriptionFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref TranslateAndSubtitleFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref SSMLFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref SSMLToPollyFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref MediaConvertFunction
+
+
+
+  TranscriptionFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
+    Properties:
+      CodeUri: functions/lambda1_s3_trigger_transcription/
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.8
+      Environment:
+        Variables:
+          OUTPUT_BUCKET: transcribe.json.conygre.com
+      Policies: arn:aws:iam::963778699255:policy/S3_Transcribe_Policy
+
+  TranslateAndSubtitleFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/lambda2_json_to_srt/
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.8
+      Environment:
+        Variables:
+          OUTPUT_BUCKET: transcribe.srt.conygre.com
+          INPUT_BUCKET: transcribe.json.conygre.com
+      Policies: arn:aws:iam::963778699255:policy/S3_Transcribe_Policy
+
+  SSMLFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/lambda3_srt_to_ssml/
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.8
+      Environment:
+        Variables:
+          OUTPUT_BUCKET: transcribe.ssml.conygre.com
+          INPUT_BUCKET: transcribe.srt.conygre.com
+      Policies: arn:aws:iam::963778699255:policy/S3_Transcribe_Policy
+
+  SSMLToPollyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/lambda4_ssml_to_speech_Polly/
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.8
+      Environment:
+        Variables:
+          OUTPUT_BUCKET: transcribe.audio.conygre.com
+          INPUT_BUCKET: transcribe.ssml.conygre.com
+      Policies: arn:aws:iam::963778699255:policy/S3_Transcribe_Policy
+
+  MediaConvertFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/lambda5_mediaconvert/
+      Handler: lambda_handler.handler
+      Runtime: nodejs12.x
+      Policies: 
+        - arn:aws:iam::963778699255:policy/S3_Transcribe_Policy
+        - arn:aws:iam::aws:policy/AWSElementalMediaConvertFullAccess
+
+
+
+Outputs:
+  VideoTranslaterStateMachineArn:
+    Description: "Video Transcoder State Machine"
+    Value: !Ref VideoTranslaterStateMachine
+  StockTradingStateMachineRoleArn:
+    Description: "IAM Role created for Video Translater State machine based on the specified SAM Policy Templates"
+    Value: !GetAtt VideoTranslaterStateMachineRole.Arn

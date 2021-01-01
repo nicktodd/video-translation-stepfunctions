@@ -1,0 +1,91 @@
+{
+    "Comment": "A state machine that runs a video transcode and translation service.",
+    "StartAt": "Run the Transcription",
+    "States": {
+        "Run the Transcription": {
+            "Type": "Task",
+            "Resource": "${TranscriptionFunctionArn}",
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "States.TaskFailed"
+                    ],
+                    "IntervalSeconds": 15,
+                    "MaxAttempts": 2,
+                    "BackoffRate": 1.5
+                }
+            ],
+            "Next": "Wait For Transcription to Complete"
+        },
+        "Wait For Transcription to Complete": {
+            "Type": "Wait",
+            "Seconds": 120,
+            "Next": "Translate and Create Subtitles"
+          },
+        "Translate and Create Subtitles": {
+            "Type": "Task",
+            "Resource": "${TranslateAndSubtitleFunctionArn}",
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "States.TaskFailed"
+                    ],
+                    "IntervalSeconds": 2,
+                    "MaxAttempts": 2,
+                    "BackoffRate": 1
+                }
+            ],
+            "Next": "Create SSML"
+        },
+        "Create SSML": {
+            "Type": "Task",
+            "Resource": "${SSMLFunctionArn}",
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "States.TaskFailed"
+                    ],
+                    "IntervalSeconds": 2,
+                    "MaxAttempts": 2,
+                    "BackoffRate": 1
+                }
+            ],
+            "Next": "Create Speech"
+        },
+        "Create Speech": {
+            "Type": "Task",
+            "Resource": "${SSMLToPollyFunctionArn}",
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "States.TaskFailed"
+                    ],
+                    "IntervalSeconds": 2,
+                    "MaxAttempts": 2,
+                    "BackoffRate": 2
+                }
+            ],
+            "Next": "Wait for Audio Creation to Complete"
+        },
+        "Wait for Audio Creation to Complete": {
+            "Type": "Wait",
+            "Seconds": 120,
+            "Next": "Create Media"
+          },
+        "Create Media": {
+            "Type": "Task",
+            "Resource": "${MediaConvertFunctionArn}",
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "States.TaskFailed"
+                    ],
+                    "IntervalSeconds": 2,
+                    "MaxAttempts": 2,
+                    "BackoffRate": 2
+                }
+            ],
+            "End": true
+        }
+    }
+}
