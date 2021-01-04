@@ -17,8 +17,6 @@ Globals:
         POLLY_AUDIO_BUCKET: transcribe.audio.conygre.com
         FINAL_OUTPUT_BUCKET: transcribe.output.conygre.com
 
-
-
 Resources:
   VideoTranslaterStateMachine:
     Type: AWS::Serverless::StateMachine # More info about State Machine Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-statemachine.html
@@ -55,6 +53,7 @@ Resources:
       Environment:
         Variables:
           OUTPUT_BUCKET: transcribe.json.conygre.com
+          INPUT_BUCKET: transcribe.input.conygre.com
       Policies: !Sub "arn:aws:iam::${AWS::AccountId}:policy/S3_Transcribe_Policy"
 
   TranslateAndSubtitleFunction:
@@ -103,12 +102,8 @@ Resources:
         - !Sub "arn:aws:iam::${AWS::AccountId}:policy/S3_Transcribe_Policy"
         - !Sub "arn:aws:iam::aws:policy/AWSElementalMediaConvertFullAccess"
 
-
-
 Outputs:
   VideoTranslaterStateMachineArn:
     Description: "Video Transcoder State Machine"
     Value: !Ref VideoTranslaterStateMachine
-  StockTradingStateMachineRoleArn:
-    Description: "IAM Role created for Video Translater State machine based on the specified SAM Policy Templates"
-    Value: !GetAtt VideoTranslaterStateMachineRole.Arn
+  

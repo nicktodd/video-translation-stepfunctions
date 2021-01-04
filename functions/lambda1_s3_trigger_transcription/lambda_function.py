@@ -12,6 +12,7 @@ you want in the translation
 '''
     # get the output bucket from the environment variable, or use a hardcoded default
     output_bucket_name = os.environ["OUTPUT_BUCKET"] if os.environ["OUTPUT_BUCKET"] else "transcribe.json.conygre.com"
+    input_bucket_name = os.environ["INPUT_BUCKET"] if os.environ["INPUT_BUCKET"] else "transcribe.json.conygre.com"
     
     s3 = boto3.client('s3')
     if event:
@@ -19,7 +20,7 @@ you want in the translation
         #input_bucket_name = str(fileobj['s3']['bucket']['name'])
         #audio_file_name = str(fileobj['s3']['object']['key'])
         
-        input_bucket_name = "transcribe.input.conygre.com"
+        #input_bucket_name = "transcribe.input.conygre.com"
         audio_file_name = event["video_file"]
         print ("Filename ",audio_file_name)
         
