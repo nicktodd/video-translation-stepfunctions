@@ -50,6 +50,7 @@ Resources:
       CodeUri: functions/lambda1_s3_trigger_transcription/
       Handler: lambda_function.lambda_handler
       Runtime: python3.8
+      Timeout: 10
       Environment:
         Variables:
           OUTPUT_BUCKET: transcribe.json.conygre.com
@@ -62,6 +63,7 @@ Resources:
       CodeUri: functions/lambda2_json_to_srt/
       Handler: lambda_function.lambda_handler
       Runtime: python3.8
+      Timeout: 10
       Environment:
         Variables:
           OUTPUT_BUCKET: transcribe.srt.conygre.com
@@ -74,6 +76,7 @@ Resources:
       CodeUri: functions/lambda3_srt_to_ssml/
       Handler: lambda_function.lambda_handler
       Runtime: python3.8
+      Timeout: 10
       Environment:
         Variables:
           OUTPUT_BUCKET: transcribe.ssml.conygre.com
@@ -86,6 +89,7 @@ Resources:
       CodeUri: functions/lambda4_ssml_to_speech_Polly/
       Handler: lambda_function.lambda_handler
       Runtime: python3.8
+      Timeout: 10
       Environment:
         Variables:
           OUTPUT_BUCKET: transcribe.audio.conygre.com
@@ -98,6 +102,7 @@ Resources:
       CodeUri: functions/lambda5_mediaconvert/
       Handler: lambda_handler.handler
       Runtime: nodejs12.x
+      Timeout: 10
       Policies: 
         - !Sub "arn:aws:iam::${AWS::AccountId}:policy/S3_Transcribe_Policy"
         - !Sub "arn:aws:iam::aws:policy/AWSElementalMediaConvertFullAccess"
