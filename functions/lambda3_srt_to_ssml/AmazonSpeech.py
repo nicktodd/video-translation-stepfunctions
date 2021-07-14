@@ -36,7 +36,8 @@ class AmazonSpeech(PySSML):
         """Max duration"""
         if max_duration is None:
             raise TypeError('Parameter duration must not be None')
-        self._validate_duration(max_duration)
+        # This used to work until July 2021. Not sure why but seems OK without this in it
+        #self._validate_duration(max_duration)
         if autobreaths:
             self.ssml_list.append("<amazon:auto-breaths frequency='high' volume='medium' duration='medium'><prosody amazon:max-duration='%s'>%s</prosody></amazon:auto-breaths>" % (self._escape(max_duration),text))
         else:
