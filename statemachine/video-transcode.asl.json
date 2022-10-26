@@ -19,7 +19,7 @@
         },
         "Wait For Transcription to Complete": {
             "Type": "Wait",
-            "Seconds": 90,
+            "Seconds": 120,
             "Next": "Translate and Create Subtitles"
           },
         "Translate and Create Subtitles": {
@@ -84,17 +84,18 @@
                     "MaxAttempts": 2,
                     "BackoffRate": 2
                 }
-            ]
+            ],
+            "Next": "Wait For Media Convert to complete"
         },
         "Wait For Media Convert to complete": {
             "Type": "Wait",
             "Seconds": 90,
-            "Next": "Translate and Create Subtitles"
+            "Next": "Update Web Page"
           },
           "Update Web Page": {
             "Type": "Task",
-            "Resource": "${UpdateWebContent}",
-            "End": "True"
+            "Resource": "${WebContentUpdaterFunctionArn}",
+            "End": true
         }
     }
 }

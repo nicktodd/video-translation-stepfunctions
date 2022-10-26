@@ -13,17 +13,7 @@ exports.handler = async function (event, context, callback) {
   let originalVideoFilename = originalVideoFileNameWithoutTimeStamp.split("_translated")[0];
   console.log("video file is " + originalVideoFilename);
 
-  // now get the subtitles
-  let tranlatedSubtitlesLanguage = originalVideoFilename.split("__")[2].substring(0, 2);
 
-
-  let threeLetterLanguageCode = codes[tranlatedSubtitlesLanguage]["639-2"].toUpperCase();
-  let languageName = codes[tranlatedSubtitlesLanguage]["name"];
-
-  console.log(threeLetterLanguageCode + " is being used for " + languageName)
-
-
-  let masterVideoFile = "s3://" + originalVideoBucket + "/" + originalVideoFilename + ".mp4";
   let destinationLocation = "s3://" + destBucket + "/" + originalVideoFilename + "/";;
 
   console.log("destination location " + destinationLocation);
@@ -44,7 +34,7 @@ exports.handler = async function (event, context, callback) {
     console.log(`File uploaded successfully. ${data.Location}`);
   });
 
-  let prefix = originalVideoFileName
+  let prefix = originalVideoFilename
   var listParams = {
     Bucket: destBucket,
     Prefix: prefix
