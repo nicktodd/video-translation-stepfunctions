@@ -101,7 +101,12 @@ Resources:
     Properties:
       CodeUri: functions/lambda5_mediaconvert/
       Handler: lambda_handler.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs16.x
+      Environment:
+        Variables:
+          MEDIA_CONVERT_ROLE: arn:aws:iam::963778699255:role/MediaConvertAWSDefined
+          MEDIA_CONVERT_URL: https://vasjpylpa.mediaconvert.us-east-1.amazonaws.com
+          MEDIA_CONVERT_QUEUE: arn:aws:mediaconvert:us-east-1:963778699255:queues/Default
       Timeout: 10
       Policies: 
         - !Sub "arn:aws:iam::${AWS::AccountId}:policy/S3_Transcribe_Policy"
