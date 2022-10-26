@@ -46,4 +46,13 @@ manifest_hash = ""
 packagetype = "Zip"
 functions = ["MediaConvertFunction"]
 
+[function_build_definitions.38668405-09be-46ed-afca-5819e14691cd]
+codeuri = "D:\\GitRepos\\AWSDemos\\video-translation-stepfunctions\\functions\\lambda6_update_web"
+runtime = "nodejs16.x"
+architecture = "x86_64"
+handler = "lambda_handler.handler"
+manifest_hash = ""
+packagetype = "Zip"
+functions = ["WebContentUpdaterFunction"]
+
 [layer_build_definitions]

@@ -28,6 +28,7 @@ Resources:
         SSMLFunctionArn: !GetAtt SSMLFunction.Arn
         SSMLToPollyFunctionArn: !GetAtt SSMLToPollyFunction.Arn
         MediaConvertFunctionArn: !GetAtt MediaConvertFunction.Arn
+        WebContentUpdaterFunctionArn: !GetAtt WebContentUpdaterFunction.Arn
         
         
       Policies: # Find out more about SAM policy templates: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
@@ -41,6 +42,8 @@ Resources:
             FunctionName: !Ref SSMLToPollyFunction
         - LambdaInvokePolicy:
             FunctionName: !Ref MediaConvertFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref WebContentUpdaterFunction
 
 
 
@@ -107,6 +110,17 @@ Resources:
           MEDIA_CONVERT_ROLE: arn:aws:iam::963778699255:role/MediaConvertAWSDefined
           MEDIA_CONVERT_URL: https://vasjpylpa.mediaconvert.us-east-1.amazonaws.com
           MEDIA_CONVERT_QUEUE: arn:aws:mediaconvert:us-east-1:963778699255:queues/Default
+      Timeout: 10
+      Policies: 
+        - !Sub "arn:aws:iam::${AWS::AccountId}:policy/S3_Transcribe_Policy"
+        - !Sub "arn:aws:iam::aws:policy/AWSElementalMediaConvertFullAccess"
+
+  WebContentUpdaterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/lambda6_update_web/
+      Handler: lambda_handler.handler
+      Runtime: nodejs16.x
       Timeout: 10
       Policies: 
         - !Sub "arn:aws:iam::${AWS::AccountId}:policy/S3_Transcribe_Policy"
