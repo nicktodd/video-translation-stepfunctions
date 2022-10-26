@@ -1,5 +1,5 @@
 // Load the SDK for JavaScript
-let AWS = require('aws-sdk');
+const AWS = require('aws-sdk');
 const codes = require('./iso_639-1');
 
 exports.handler = function (event, context, callback) {
@@ -321,11 +321,12 @@ exports.handler = function (event, context, callback) {
     }
 
   });
-
+  // upload the JS config file with the filename
   const params = {
     Bucket: destBucket,
     Key: 'config.js', // File name you want to save as in S3
-    Body: 'const videoFolderAndm3Filename = "' + originalVideoFilename + '"\n'
+    Body: 'const videoFolderAndm3Filename = "' + originalVideoFilename + '"\n',
+    ACL: 'public-read'
   };
   const s3 = new AWS.S3();
   // Uploading files to the bucket
@@ -335,6 +336,8 @@ exports.handler = function (event, context, callback) {
     }
     console.log(`File uploaded successfully. ${data.Location}`);
   });
+
+
 
 
 }
