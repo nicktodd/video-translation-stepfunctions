@@ -2,6 +2,7 @@
 
 <head>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="config.js"></script>
 <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
 </head>
 
@@ -9,11 +10,10 @@
 <video class="vjs-default-skin" controls preload="auto" width="640" height="268" id="video"></video>
 <script>
   
-  
-  // TODO AMEND THIS TO BE YOUR VIDEO FILE
-  let videoFolderAndm3Filename = "nickspeaking__en-GB__es";
 
-  let finalPath = "/" + videoFolderAndm3Filename + "/" + videoFolderAndm3Filename + ".m3u8";
+
+
+  let finalPath =  videoFolderAndm3Filename + "/" + videoFolderAndm3Filename + ".m3u8";
 
   if(Hls.isSupported()) {
     var video = document.getElementById('video');
